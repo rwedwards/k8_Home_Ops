@@ -1,0 +1,56 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: graylog-mongo-pv
+spec:
+  capacity:
+    storage: 10Gi
+  volumeMode: Filesystem
+  accessModes:
+    - ReadWriteMany
+  persistentVolumeReclaimPolicy: Retain
+  nfs:
+    path: /mnt/user/k8/graylog/mongo
+    server: 192.168.2.10
+  claimRef:
+    namespace: logging
+    name: mongo-pvc
+
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: graylog-opensearch-pv
+spec:
+  capacity:
+    storage: 50Gi
+  volumeMode: Filesystem
+  accessModes:
+    - ReadWriteMany
+  persistentVolumeReclaimPolicy: Retain
+  nfs:
+    path: /mnt/user/k8/graylog/opensearch
+    server: 192.168.2.10
+  claimRef:
+    namespace: logging
+    name: opensearch-pvc
+
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: graylog-data-pv
+spec:
+  capacity:
+    storage: 10Gi
+  volumeMode: Filesystem
+  accessModes:
+    - ReadWriteMany
+  persistentVolumeReclaimPolicy: Retain
+  nfs:
+    path: /mnt/user/k8/graylog/data
+    server: 192.168.2.10
+  claimRef:
+    namespace: logging
+    name: graylog-data-pvc
+

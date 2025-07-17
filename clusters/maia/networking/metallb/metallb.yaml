@@ -1,0 +1,1393 @@
+apiVersion: v1
+items:
+- apiVersion: v1
+  kind: Pod
+  metadata:
+    annotations:
+      cni.projectcalico.org/containerID: d1db8c99d614a110f15bd89f733b70d6bc02164113d82eff7796a3301f05d8b9
+      cni.projectcalico.org/podIP: 10.244.128.128/32
+      cni.projectcalico.org/podIPs: 10.244.128.128/32
+      prometheus.io/port: "7472"
+      prometheus.io/scrape: "true"
+    creationTimestamp: "2025-07-16T21:54:51Z"
+    generateName: controller-547c7bdf5c-
+    labels:
+      app: metallb
+      component: controller
+      pod-template-hash: 547c7bdf5c
+    name: controller-547c7bdf5c-r57q4
+    namespace: metallb-system
+    ownerReferences:
+    - apiVersion: apps/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: ReplicaSet
+      name: controller-547c7bdf5c
+      uid: c26ec651-fcee-4b30-88a6-38b08d0136bf
+    resourceVersion: "2064"
+    uid: 69013a4b-888e-4c6c-859a-5e36040bf6e2
+  spec:
+    containers:
+    - args:
+      - --port=7472
+      - --log-level=info
+      env:
+      - name: METALLB_ML_SECRET_NAME
+        value: memberlist
+      - name: METALLB_DEPLOYMENT
+        value: controller
+      image: quay.io/metallb/controller:v0.13.12
+      imagePullPolicy: IfNotPresent
+      livenessProbe:
+        failureThreshold: 3
+        httpGet:
+          path: /metrics
+          port: monitoring
+          scheme: HTTP
+        initialDelaySeconds: 10
+        periodSeconds: 10
+        successThreshold: 1
+        timeoutSeconds: 1
+      name: controller
+      ports:
+      - containerPort: 7472
+        name: monitoring
+        protocol: TCP
+      - containerPort: 9443
+        name: webhook-server
+        protocol: TCP
+      readinessProbe:
+        failureThreshold: 3
+        httpGet:
+          path: /metrics
+          port: monitoring
+          scheme: HTTP
+        initialDelaySeconds: 10
+        periodSeconds: 10
+        successThreshold: 1
+        timeoutSeconds: 1
+      resources: {}
+      securityContext:
+        allowPrivilegeEscalation: false
+        capabilities:
+          drop:
+          - all
+        readOnlyRootFilesystem: true
+      terminationMessagePath: /dev/termination-log
+      terminationMessagePolicy: File
+      volumeMounts:
+      - mountPath: /tmp/k8s-webhook-server/serving-certs
+        name: cert
+        readOnly: true
+      - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+        name: kube-api-access-qgkm9
+        readOnly: true
+    dnsPolicy: ClusterFirst
+    enableServiceLinks: true
+    nodeName: electra
+    nodeSelector:
+      kubernetes.io/os: linux
+    preemptionPolicy: PreemptLowerPriority
+    priority: 0
+    restartPolicy: Always
+    schedulerName: default-scheduler
+    securityContext:
+      fsGroup: 65534
+      runAsNonRoot: true
+      runAsUser: 65534
+    serviceAccount: controller
+    serviceAccountName: controller
+    terminationGracePeriodSeconds: 0
+    tolerations:
+    - effect: NoExecute
+      key: node.kubernetes.io/not-ready
+      operator: Exists
+      tolerationSeconds: 300
+    - effect: NoExecute
+      key: node.kubernetes.io/unreachable
+      operator: Exists
+      tolerationSeconds: 300
+    volumes:
+    - name: cert
+      secret:
+        defaultMode: 420
+        secretName: webhook-server-cert
+    - name: kube-api-access-qgkm9
+      projected:
+        defaultMode: 420
+        sources:
+        - serviceAccountToken:
+            expirationSeconds: 3607
+            path: token
+        - configMap:
+            items:
+            - key: ca.crt
+              path: ca.crt
+            name: kube-root-ca.crt
+        - downwardAPI:
+            items:
+            - fieldRef:
+                apiVersion: v1
+                fieldPath: metadata.namespace
+              path: namespace
+  status:
+    conditions:
+    - lastProbeTime: null
+      lastTransitionTime: "2025-07-16T21:54:55Z"
+      status: "True"
+      type: PodReadyToStartContainers
+    - lastProbeTime: null
+      lastTransitionTime: "2025-07-16T21:54:51Z"
+      status: "True"
+      type: Initialized
+    - lastProbeTime: null
+      lastTransitionTime: "2025-07-16T21:55:11Z"
+      status: "True"
+      type: Ready
+    - lastProbeTime: null
+      lastTransitionTime: "2025-07-16T21:55:11Z"
+      status: "True"
+      type: ContainersReady
+    - lastProbeTime: null
+      lastTransitionTime: "2025-07-16T21:54:51Z"
+      status: "True"
+      type: PodScheduled
+    containerStatuses:
+    - containerID: containerd://6b3c970bacd16b62d64f24eb89c51b985637f89cabc835715d5911e9d12ff195
+      image: quay.io/metallb/controller:v0.13.12
+      imageID: quay.io/metallb/controller@sha256:2b7eca48ed135e5f298b4ac349ec9f3b3a897ca26cc64d61939d0bfc9dcab847
+      lastState: {}
+      name: controller
+      ready: true
+      restartCount: 0
+      started: true
+      state:
+        running:
+          startedAt: "2025-07-16T21:54:55Z"
+    hostIP: 192.168.11.11
+    hostIPs:
+    - ip: 192.168.11.11
+    phase: Running
+    podIP: 10.244.128.128
+    podIPs:
+    - ip: 10.244.128.128
+    qosClass: BestEffort
+    startTime: "2025-07-16T21:54:51Z"
+- apiVersion: v1
+  kind: Pod
+  metadata:
+    annotations:
+      prometheus.io/port: "7472"
+      prometheus.io/scrape: "true"
+    creationTimestamp: "2025-07-16T21:54:51Z"
+    generateName: speaker-
+    labels:
+      app: metallb
+      component: speaker
+      controller-revision-hash: 79967b574
+      pod-template-generation: "1"
+    name: speaker-lvhlm
+    namespace: metallb-system
+    ownerReferences:
+    - apiVersion: apps/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: DaemonSet
+      name: speaker
+      uid: c56c5936-2a5b-49ca-8b25-d0ae2a22f7bb
+    resourceVersion: "2081"
+    uid: 1aa56c34-dffc-496c-b96f-d7e336e35e09
+  spec:
+    affinity:
+      nodeAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+          nodeSelectorTerms:
+          - matchFields:
+            - key: metadata.name
+              operator: In
+              values:
+              - taygete
+    containers:
+    - args:
+      - --port=7472
+      - --log-level=info
+      env:
+      - name: METALLB_NODE_NAME
+        valueFrom:
+          fieldRef:
+            apiVersion: v1
+            fieldPath: spec.nodeName
+      - name: METALLB_HOST
+        valueFrom:
+          fieldRef:
+            apiVersion: v1
+            fieldPath: status.hostIP
+      - name: METALLB_ML_BIND_ADDR
+        valueFrom:
+          fieldRef:
+            apiVersion: v1
+            fieldPath: status.podIP
+      - name: METALLB_ML_LABELS
+        value: app=metallb,component=speaker
+      - name: METALLB_ML_SECRET_KEY_PATH
+        value: /etc/ml_secret_key
+      image: quay.io/metallb/speaker:v0.13.12
+      imagePullPolicy: IfNotPresent
+      livenessProbe:
+        failureThreshold: 3
+        httpGet:
+          path: /metrics
+          port: monitoring
+          scheme: HTTP
+        initialDelaySeconds: 10
+        periodSeconds: 10
+        successThreshold: 1
+        timeoutSeconds: 1
+      name: speaker
+      ports:
+      - containerPort: 7472
+        hostPort: 7472
+        name: monitoring
+        protocol: TCP
+      - containerPort: 7946
+        hostPort: 7946
+        name: memberlist-tcp
+        protocol: TCP
+      - containerPort: 7946
+        hostPort: 7946
+        name: memberlist-udp
+        protocol: UDP
+      readinessProbe:
+        failureThreshold: 3
+        httpGet:
+          path: /metrics
+          port: monitoring
+          scheme: HTTP
+        initialDelaySeconds: 10
+        periodSeconds: 10
+        successThreshold: 1
+        timeoutSeconds: 1
+      resources: {}
+      securityContext:
+        allowPrivilegeEscalation: false
+        capabilities:
+          add:
+          - NET_RAW
+          drop:
+          - ALL
+        readOnlyRootFilesystem: true
+      terminationMessagePath: /dev/termination-log
+      terminationMessagePolicy: File
+      volumeMounts:
+      - mountPath: /etc/ml_secret_key
+        name: memberlist
+        readOnly: true
+      - mountPath: /etc/metallb
+        name: metallb-excludel2
+        readOnly: true
+      - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+        name: kube-api-access-f29r8
+        readOnly: true
+    dnsPolicy: ClusterFirst
+    enableServiceLinks: true
+    hostNetwork: true
+    nodeName: taygete
+    nodeSelector:
+      kubernetes.io/os: linux
+    preemptionPolicy: PreemptLowerPriority
+    priority: 0
+    restartPolicy: Always
+    schedulerName: default-scheduler
+    securityContext: {}
+    serviceAccount: speaker
+    serviceAccountName: speaker
+    terminationGracePeriodSeconds: 2
+    tolerations:
+    - effect: NoSchedule
+      key: node-role.kubernetes.io/master
+      operator: Exists
+    - effect: NoSchedule
+      key: node-role.kubernetes.io/control-plane
+      operator: Exists
+    - effect: NoExecute
+      key: node.kubernetes.io/not-ready
+      operator: Exists
+    - effect: NoExecute
+      key: node.kubernetes.io/unreachable
+      operator: Exists
+    - effect: NoSchedule
+      key: node.kubernetes.io/disk-pressure
+      operator: Exists
+    - effect: NoSchedule
+      key: node.kubernetes.io/memory-pressure
+      operator: Exists
+    - effect: NoSchedule
+      key: node.kubernetes.io/pid-pressure
+      operator: Exists
+    - effect: NoSchedule
+      key: node.kubernetes.io/unschedulable
+      operator: Exists
+    - effect: NoSchedule
+      key: node.kubernetes.io/network-unavailable
+      operator: Exists
+    volumes:
+    - name: memberlist
+      secret:
+        defaultMode: 420
+        secretName: memberlist
+    - configMap:
+        defaultMode: 256
+        name: metallb-excludel2
+      name: metallb-excludel2
+    - name: kube-api-access-f29r8
+      projected:
+        defaultMode: 420
+        sources:
+        - serviceAccountToken:
+            expirationSeconds: 3607
+            path: token
+        - configMap:
+            items:
+            - key: ca.crt
+              path: ca.crt
+            name: kube-root-ca.crt
+        - downwardAPI:
+            items:
+            - fieldRef:
+                apiVersion: v1
+                fieldPath: metadata.namespace
+              path: namespace
+  status:
+    conditions:
+    - lastProbeTime: null
+      lastTransitionTime: "2025-07-16T21:55:02Z"
+      status: "True"
+      type: PodReadyToStartContainers
+    - lastProbeTime: null
+      lastTransitionTime: "2025-07-16T21:54:51Z"
+      status: "True"
+      type: Initialized
+    - lastProbeTime: null
+      lastTransitionTime: "2025-07-16T21:55:18Z"
+      status: "True"
+      type: Ready
+    - lastProbeTime: null
+      lastTransitionTime: "2025-07-16T21:55:18Z"
+      status: "True"
+      type: ContainersReady
+    - lastProbeTime: null
+      lastTransitionTime: "2025-07-16T21:54:51Z"
+      status: "True"
+      type: PodScheduled
+    containerStatuses:
+    - containerID: containerd://82c2fe9c06fa6ecbf212d095e17e9c9d8c8904d44c5623a47d4e21f32cdf19c6
+      image: quay.io/metallb/speaker:v0.13.12
+      imageID: quay.io/metallb/speaker@sha256:b4a5576a3cf5816612f54355804bdb83a2560ad4120691129a2e5bac5339ee0c
+      lastState: {}
+      name: speaker
+      ready: true
+      restartCount: 0
+      started: true
+      state:
+        running:
+          startedAt: "2025-07-16T21:55:02Z"
+    hostIP: 192.168.11.12
+    hostIPs:
+    - ip: 192.168.11.12
+    phase: Running
+    podIP: 192.168.11.12
+    podIPs:
+    - ip: 192.168.11.12
+    qosClass: BestEffort
+    startTime: "2025-07-16T21:54:51Z"
+- apiVersion: v1
+  kind: Pod
+  metadata:
+    annotations:
+      prometheus.io/port: "7472"
+      prometheus.io/scrape: "true"
+    creationTimestamp: "2025-07-16T21:54:51Z"
+    generateName: speaker-
+    labels:
+      app: metallb
+      component: speaker
+      controller-revision-hash: 79967b574
+      pod-template-generation: "1"
+    name: speaker-q6h67
+    namespace: metallb-system
+    ownerReferences:
+    - apiVersion: apps/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: DaemonSet
+      name: speaker
+      uid: c56c5936-2a5b-49ca-8b25-d0ae2a22f7bb
+    resourceVersion: "2083"
+    uid: 198fe32a-94a3-4763-bdf2-e332bab5e3dc
+  spec:
+    affinity:
+      nodeAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+          nodeSelectorTerms:
+          - matchFields:
+            - key: metadata.name
+              operator: In
+              values:
+              - electra
+    containers:
+    - args:
+      - --port=7472
+      - --log-level=info
+      env:
+      - name: METALLB_NODE_NAME
+        valueFrom:
+          fieldRef:
+            apiVersion: v1
+            fieldPath: spec.nodeName
+      - name: METALLB_HOST
+        valueFrom:
+          fieldRef:
+            apiVersion: v1
+            fieldPath: status.hostIP
+      - name: METALLB_ML_BIND_ADDR
+        valueFrom:
+          fieldRef:
+            apiVersion: v1
+            fieldPath: status.podIP
+      - name: METALLB_ML_LABELS
+        value: app=metallb,component=speaker
+      - name: METALLB_ML_SECRET_KEY_PATH
+        value: /etc/ml_secret_key
+      image: quay.io/metallb/speaker:v0.13.12
+      imagePullPolicy: IfNotPresent
+      livenessProbe:
+        failureThreshold: 3
+        httpGet:
+          path: /metrics
+          port: monitoring
+          scheme: HTTP
+        initialDelaySeconds: 10
+        periodSeconds: 10
+        successThreshold: 1
+        timeoutSeconds: 1
+      name: speaker
+      ports:
+      - containerPort: 7472
+        hostPort: 7472
+        name: monitoring
+        protocol: TCP
+      - containerPort: 7946
+        hostPort: 7946
+        name: memberlist-tcp
+        protocol: TCP
+      - containerPort: 7946
+        hostPort: 7946
+        name: memberlist-udp
+        protocol: UDP
+      readinessProbe:
+        failureThreshold: 3
+        httpGet:
+          path: /metrics
+          port: monitoring
+          scheme: HTTP
+        initialDelaySeconds: 10
+        periodSeconds: 10
+        successThreshold: 1
+        timeoutSeconds: 1
+      resources: {}
+      securityContext:
+        allowPrivilegeEscalation: false
+        capabilities:
+          add:
+          - NET_RAW
+          drop:
+          - ALL
+        readOnlyRootFilesystem: true
+      terminationMessagePath: /dev/termination-log
+      terminationMessagePolicy: File
+      volumeMounts:
+      - mountPath: /etc/ml_secret_key
+        name: memberlist
+        readOnly: true
+      - mountPath: /etc/metallb
+        name: metallb-excludel2
+        readOnly: true
+      - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+        name: kube-api-access-mqlfp
+        readOnly: true
+    dnsPolicy: ClusterFirst
+    enableServiceLinks: true
+    hostNetwork: true
+    nodeName: electra
+    nodeSelector:
+      kubernetes.io/os: linux
+    preemptionPolicy: PreemptLowerPriority
+    priority: 0
+    restartPolicy: Always
+    schedulerName: default-scheduler
+    securityContext: {}
+    serviceAccount: speaker
+    serviceAccountName: speaker
+    terminationGracePeriodSeconds: 2
+    tolerations:
+    - effect: NoSchedule
+      key: node-role.kubernetes.io/master
+      operator: Exists
+    - effect: NoSchedule
+      key: node-role.kubernetes.io/control-plane
+      operator: Exists
+    - effect: NoExecute
+      key: node.kubernetes.io/not-ready
+      operator: Exists
+    - effect: NoExecute
+      key: node.kubernetes.io/unreachable
+      operator: Exists
+    - effect: NoSchedule
+      key: node.kubernetes.io/disk-pressure
+      operator: Exists
+    - effect: NoSchedule
+      key: node.kubernetes.io/memory-pressure
+      operator: Exists
+    - effect: NoSchedule
+      key: node.kubernetes.io/pid-pressure
+      operator: Exists
+    - effect: NoSchedule
+      key: node.kubernetes.io/unschedulable
+      operator: Exists
+    - effect: NoSchedule
+      key: node.kubernetes.io/network-unavailable
+      operator: Exists
+    volumes:
+    - name: memberlist
+      secret:
+        defaultMode: 420
+        secretName: memberlist
+    - configMap:
+        defaultMode: 256
+        name: metallb-excludel2
+      name: metallb-excludel2
+    - name: kube-api-access-mqlfp
+      projected:
+        defaultMode: 420
+        sources:
+        - serviceAccountToken:
+            expirationSeconds: 3607
+            path: token
+        - configMap:
+            items:
+            - key: ca.crt
+              path: ca.crt
+            name: kube-root-ca.crt
+        - downwardAPI:
+            items:
+            - fieldRef:
+                apiVersion: v1
+                fieldPath: metadata.namespace
+              path: namespace
+  status:
+    conditions:
+    - lastProbeTime: null
+      lastTransitionTime: "2025-07-16T21:55:02Z"
+      status: "True"
+      type: PodReadyToStartContainers
+    - lastProbeTime: null
+      lastTransitionTime: "2025-07-16T21:54:51Z"
+      status: "True"
+      type: Initialized
+    - lastProbeTime: null
+      lastTransitionTime: "2025-07-16T21:55:18Z"
+      status: "True"
+      type: Ready
+    - lastProbeTime: null
+      lastTransitionTime: "2025-07-16T21:55:18Z"
+      status: "True"
+      type: ContainersReady
+    - lastProbeTime: null
+      lastTransitionTime: "2025-07-16T21:54:51Z"
+      status: "True"
+      type: PodScheduled
+    containerStatuses:
+    - containerID: containerd://dc67e0c8334a1195f506d4427a02037d09856050184b1e0d4dae2ab0236f805f
+      image: quay.io/metallb/speaker:v0.13.12
+      imageID: quay.io/metallb/speaker@sha256:b4a5576a3cf5816612f54355804bdb83a2560ad4120691129a2e5bac5339ee0c
+      lastState: {}
+      name: speaker
+      ready: true
+      restartCount: 0
+      started: true
+      state:
+        running:
+          startedAt: "2025-07-16T21:55:02Z"
+    hostIP: 192.168.11.11
+    hostIPs:
+    - ip: 192.168.11.11
+    phase: Running
+    podIP: 192.168.11.11
+    podIPs:
+    - ip: 192.168.11.11
+    qosClass: BestEffort
+    startTime: "2025-07-16T21:54:51Z"
+- apiVersion: v1
+  kind: Pod
+  metadata:
+    annotations:
+      prometheus.io/port: "7472"
+      prometheus.io/scrape: "true"
+    creationTimestamp: "2025-07-16T21:54:51Z"
+    generateName: speaker-
+    labels:
+      app: metallb
+      component: speaker
+      controller-revision-hash: 79967b574
+      pod-template-generation: "1"
+    name: speaker-wbwbl
+    namespace: metallb-system
+    ownerReferences:
+    - apiVersion: apps/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: DaemonSet
+      name: speaker
+      uid: c56c5936-2a5b-49ca-8b25-d0ae2a22f7bb
+    resourceVersion: "2085"
+    uid: 5b6d712f-5bb2-4b61-9e03-4c990f1f9ae0
+  spec:
+    affinity:
+      nodeAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+          nodeSelectorTerms:
+          - matchFields:
+            - key: metadata.name
+              operator: In
+              values:
+              - maia
+    containers:
+    - args:
+      - --port=7472
+      - --log-level=info
+      env:
+      - name: METALLB_NODE_NAME
+        valueFrom:
+          fieldRef:
+            apiVersion: v1
+            fieldPath: spec.nodeName
+      - name: METALLB_HOST
+        valueFrom:
+          fieldRef:
+            apiVersion: v1
+            fieldPath: status.hostIP
+      - name: METALLB_ML_BIND_ADDR
+        valueFrom:
+          fieldRef:
+            apiVersion: v1
+            fieldPath: status.podIP
+      - name: METALLB_ML_LABELS
+        value: app=metallb,component=speaker
+      - name: METALLB_ML_SECRET_KEY_PATH
+        value: /etc/ml_secret_key
+      image: quay.io/metallb/speaker:v0.13.12
+      imagePullPolicy: IfNotPresent
+      livenessProbe:
+        failureThreshold: 3
+        httpGet:
+          path: /metrics
+          port: monitoring
+          scheme: HTTP
+        initialDelaySeconds: 10
+        periodSeconds: 10
+        successThreshold: 1
+        timeoutSeconds: 1
+      name: speaker
+      ports:
+      - containerPort: 7472
+        hostPort: 7472
+        name: monitoring
+        protocol: TCP
+      - containerPort: 7946
+        hostPort: 7946
+        name: memberlist-tcp
+        protocol: TCP
+      - containerPort: 7946
+        hostPort: 7946
+        name: memberlist-udp
+        protocol: UDP
+      readinessProbe:
+        failureThreshold: 3
+        httpGet:
+          path: /metrics
+          port: monitoring
+          scheme: HTTP
+        initialDelaySeconds: 10
+        periodSeconds: 10
+        successThreshold: 1
+        timeoutSeconds: 1
+      resources: {}
+      securityContext:
+        allowPrivilegeEscalation: false
+        capabilities:
+          add:
+          - NET_RAW
+          drop:
+          - ALL
+        readOnlyRootFilesystem: true
+      terminationMessagePath: /dev/termination-log
+      terminationMessagePolicy: File
+      volumeMounts:
+      - mountPath: /etc/ml_secret_key
+        name: memberlist
+        readOnly: true
+      - mountPath: /etc/metallb
+        name: metallb-excludel2
+        readOnly: true
+      - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+        name: kube-api-access-prmb6
+        readOnly: true
+    dnsPolicy: ClusterFirst
+    enableServiceLinks: true
+    hostNetwork: true
+    nodeName: maia
+    nodeSelector:
+      kubernetes.io/os: linux
+    preemptionPolicy: PreemptLowerPriority
+    priority: 0
+    restartPolicy: Always
+    schedulerName: default-scheduler
+    securityContext: {}
+    serviceAccount: speaker
+    serviceAccountName: speaker
+    terminationGracePeriodSeconds: 2
+    tolerations:
+    - effect: NoSchedule
+      key: node-role.kubernetes.io/master
+      operator: Exists
+    - effect: NoSchedule
+      key: node-role.kubernetes.io/control-plane
+      operator: Exists
+    - effect: NoExecute
+      key: node.kubernetes.io/not-ready
+      operator: Exists
+    - effect: NoExecute
+      key: node.kubernetes.io/unreachable
+      operator: Exists
+    - effect: NoSchedule
+      key: node.kubernetes.io/disk-pressure
+      operator: Exists
+    - effect: NoSchedule
+      key: node.kubernetes.io/memory-pressure
+      operator: Exists
+    - effect: NoSchedule
+      key: node.kubernetes.io/pid-pressure
+      operator: Exists
+    - effect: NoSchedule
+      key: node.kubernetes.io/unschedulable
+      operator: Exists
+    - effect: NoSchedule
+      key: node.kubernetes.io/network-unavailable
+      operator: Exists
+    volumes:
+    - name: memberlist
+      secret:
+        defaultMode: 420
+        secretName: memberlist
+    - configMap:
+        defaultMode: 256
+        name: metallb-excludel2
+      name: metallb-excludel2
+    - name: kube-api-access-prmb6
+      projected:
+        defaultMode: 420
+        sources:
+        - serviceAccountToken:
+            expirationSeconds: 3607
+            path: token
+        - configMap:
+            items:
+            - key: ca.crt
+              path: ca.crt
+            name: kube-root-ca.crt
+        - downwardAPI:
+            items:
+            - fieldRef:
+                apiVersion: v1
+                fieldPath: metadata.namespace
+              path: namespace
+  status:
+    conditions:
+    - lastProbeTime: null
+      lastTransitionTime: "2025-07-16T21:55:03Z"
+      status: "True"
+      type: PodReadyToStartContainers
+    - lastProbeTime: null
+      lastTransitionTime: "2025-07-16T21:54:51Z"
+      status: "True"
+      type: Initialized
+    - lastProbeTime: null
+      lastTransitionTime: "2025-07-16T21:55:18Z"
+      status: "True"
+      type: Ready
+    - lastProbeTime: null
+      lastTransitionTime: "2025-07-16T21:55:18Z"
+      status: "True"
+      type: ContainersReady
+    - lastProbeTime: null
+      lastTransitionTime: "2025-07-16T21:54:51Z"
+      status: "True"
+      type: PodScheduled
+    containerStatuses:
+    - containerID: containerd://585e58820d4a1a01a6f38167f405d436662c5f8ad87051f1efe926f834ed99b6
+      image: quay.io/metallb/speaker:v0.13.12
+      imageID: quay.io/metallb/speaker@sha256:b4a5576a3cf5816612f54355804bdb83a2560ad4120691129a2e5bac5339ee0c
+      lastState: {}
+      name: speaker
+      ready: true
+      restartCount: 0
+      started: true
+      state:
+        running:
+          startedAt: "2025-07-16T21:55:02Z"
+    hostIP: 192.168.11.10
+    hostIPs:
+    - ip: 192.168.11.10
+    phase: Running
+    podIP: 192.168.11.10
+    podIPs:
+    - ip: 192.168.11.10
+    qosClass: BestEffort
+    startTime: "2025-07-16T21:54:51Z"
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"v1","kind":"Service","metadata":{"annotations":{},"name":"webhook-service","namespace":"metallb-system"},"spec":{"ports":[{"port":443,"targetPort":9443}],"selector":{"component":"controller"}}}
+    creationTimestamp: "2025-07-16T21:54:51Z"
+    name: webhook-service
+    namespace: metallb-system
+    resourceVersion: "1952"
+    uid: a1eacd69-0d08-45bf-8aed-3e56d10620d1
+  spec:
+    clusterIP: 10.105.112.124
+    clusterIPs:
+    - 10.105.112.124
+    internalTrafficPolicy: Cluster
+    ipFamilies:
+    - IPv4
+    ipFamilyPolicy: SingleStack
+    ports:
+    - port: 443
+      protocol: TCP
+      targetPort: 9443
+    selector:
+      component: controller
+    sessionAffinity: None
+    type: ClusterIP
+  status:
+    loadBalancer: {}
+- apiVersion: apps/v1
+  kind: DaemonSet
+  metadata:
+    annotations:
+      deprecated.daemonset.template.generation: "1"
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"apps/v1","kind":"DaemonSet","metadata":{"annotations":{},"labels":{"app":"metallb","component":"speaker"},"name":"speaker","namespace":"metallb-system"},"spec":{"selector":{"matchLabels":{"app":"metallb","component":"speaker"}},"template":{"metadata":{"annotations":{"prometheus.io/port":"7472","prometheus.io/scrape":"true"},"labels":{"app":"metallb","component":"speaker"}},"spec":{"containers":[{"args":["--port=7472","--log-level=info"],"env":[{"name":"METALLB_NODE_NAME","valueFrom":{"fieldRef":{"fieldPath":"spec.nodeName"}}},{"name":"METALLB_HOST","valueFrom":{"fieldRef":{"fieldPath":"status.hostIP"}}},{"name":"METALLB_ML_BIND_ADDR","valueFrom":{"fieldRef":{"fieldPath":"status.podIP"}}},{"name":"METALLB_ML_LABELS","value":"app=metallb,component=speaker"},{"name":"METALLB_ML_SECRET_KEY_PATH","value":"/etc/ml_secret_key"}],"image":"quay.io/metallb/speaker:v0.13.12","livenessProbe":{"failureThreshold":3,"httpGet":{"path":"/metrics","port":"monitoring"},"initialDelaySeconds":10,"periodSeconds":10,"successThreshold":1,"timeoutSeconds":1},"name":"speaker","ports":[{"containerPort":7472,"name":"monitoring"},{"containerPort":7946,"name":"memberlist-tcp"},{"containerPort":7946,"name":"memberlist-udp","protocol":"UDP"}],"readinessProbe":{"failureThreshold":3,"httpGet":{"path":"/metrics","port":"monitoring"},"initialDelaySeconds":10,"periodSeconds":10,"successThreshold":1,"timeoutSeconds":1},"securityContext":{"allowPrivilegeEscalation":false,"capabilities":{"add":["NET_RAW"],"drop":["ALL"]},"readOnlyRootFilesystem":true},"volumeMounts":[{"mountPath":"/etc/ml_secret_key","name":"memberlist","readOnly":true},{"mountPath":"/etc/metallb","name":"metallb-excludel2","readOnly":true}]}],"hostNetwork":true,"nodeSelector":{"kubernetes.io/os":"linux"},"serviceAccountName":"speaker","terminationGracePeriodSeconds":2,"tolerations":[{"effect":"NoSchedule","key":"node-role.kubernetes.io/master","operator":"Exists"},{"effect":"NoSchedule","key":"node-role.kubernetes.io/control-plane","operator":"Exists"}],"volumes":[{"name":"memberlist","secret":{"defaultMode":420,"secretName":"memberlist"}},{"configMap":{"defaultMode":256,"name":"metallb-excludel2"},"name":"metallb-excludel2"}]}}}}
+    creationTimestamp: "2025-07-16T21:54:51Z"
+    generation: 1
+    labels:
+      app: metallb
+      component: speaker
+    name: speaker
+    namespace: metallb-system
+    resourceVersion: "2086"
+    uid: c56c5936-2a5b-49ca-8b25-d0ae2a22f7bb
+  spec:
+    revisionHistoryLimit: 10
+    selector:
+      matchLabels:
+        app: metallb
+        component: speaker
+    template:
+      metadata:
+        annotations:
+          prometheus.io/port: "7472"
+          prometheus.io/scrape: "true"
+        creationTimestamp: null
+        labels:
+          app: metallb
+          component: speaker
+      spec:
+        containers:
+        - args:
+          - --port=7472
+          - --log-level=info
+          env:
+          - name: METALLB_NODE_NAME
+            valueFrom:
+              fieldRef:
+                apiVersion: v1
+                fieldPath: spec.nodeName
+          - name: METALLB_HOST
+            valueFrom:
+              fieldRef:
+                apiVersion: v1
+                fieldPath: status.hostIP
+          - name: METALLB_ML_BIND_ADDR
+            valueFrom:
+              fieldRef:
+                apiVersion: v1
+                fieldPath: status.podIP
+          - name: METALLB_ML_LABELS
+            value: app=metallb,component=speaker
+          - name: METALLB_ML_SECRET_KEY_PATH
+            value: /etc/ml_secret_key
+          image: quay.io/metallb/speaker:v0.13.12
+          imagePullPolicy: IfNotPresent
+          livenessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /metrics
+              port: monitoring
+              scheme: HTTP
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+          name: speaker
+          ports:
+          - containerPort: 7472
+            name: monitoring
+            protocol: TCP
+          - containerPort: 7946
+            name: memberlist-tcp
+            protocol: TCP
+          - containerPort: 7946
+            name: memberlist-udp
+            protocol: UDP
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /metrics
+              port: monitoring
+              scheme: HTTP
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+          resources: {}
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              add:
+              - NET_RAW
+              drop:
+              - ALL
+            readOnlyRootFilesystem: true
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          volumeMounts:
+          - mountPath: /etc/ml_secret_key
+            name: memberlist
+            readOnly: true
+          - mountPath: /etc/metallb
+            name: metallb-excludel2
+            readOnly: true
+        dnsPolicy: ClusterFirst
+        hostNetwork: true
+        nodeSelector:
+          kubernetes.io/os: linux
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        serviceAccount: speaker
+        serviceAccountName: speaker
+        terminationGracePeriodSeconds: 2
+        tolerations:
+        - effect: NoSchedule
+          key: node-role.kubernetes.io/master
+          operator: Exists
+        - effect: NoSchedule
+          key: node-role.kubernetes.io/control-plane
+          operator: Exists
+        volumes:
+        - name: memberlist
+          secret:
+            defaultMode: 420
+            secretName: memberlist
+        - configMap:
+            defaultMode: 256
+            name: metallb-excludel2
+          name: metallb-excludel2
+    updateStrategy:
+      rollingUpdate:
+        maxSurge: 0
+        maxUnavailable: 1
+      type: RollingUpdate
+  status:
+    currentNumberScheduled: 3
+    desiredNumberScheduled: 3
+    numberAvailable: 3
+    numberMisscheduled: 0
+    numberReady: 3
+    observedGeneration: 1
+    updatedNumberScheduled: 3
+- apiVersion: apps/v1
+  kind: Deployment
+  metadata:
+    annotations:
+      deployment.kubernetes.io/revision: "1"
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"apps/v1","kind":"Deployment","metadata":{"annotations":{},"labels":{"app":"metallb","component":"controller"},"name":"controller","namespace":"metallb-system"},"spec":{"revisionHistoryLimit":3,"selector":{"matchLabels":{"app":"metallb","component":"controller"}},"template":{"metadata":{"annotations":{"prometheus.io/port":"7472","prometheus.io/scrape":"true"},"labels":{"app":"metallb","component":"controller"}},"spec":{"containers":[{"args":["--port=7472","--log-level=info"],"env":[{"name":"METALLB_ML_SECRET_NAME","value":"memberlist"},{"name":"METALLB_DEPLOYMENT","value":"controller"}],"image":"quay.io/metallb/controller:v0.13.12","livenessProbe":{"failureThreshold":3,"httpGet":{"path":"/metrics","port":"monitoring"},"initialDelaySeconds":10,"periodSeconds":10,"successThreshold":1,"timeoutSeconds":1},"name":"controller","ports":[{"containerPort":7472,"name":"monitoring"},{"containerPort":9443,"name":"webhook-server","protocol":"TCP"}],"readinessProbe":{"failureThreshold":3,"httpGet":{"path":"/metrics","port":"monitoring"},"initialDelaySeconds":10,"periodSeconds":10,"successThreshold":1,"timeoutSeconds":1},"securityContext":{"allowPrivilegeEscalation":false,"capabilities":{"drop":["all"]},"readOnlyRootFilesystem":true},"volumeMounts":[{"mountPath":"/tmp/k8s-webhook-server/serving-certs","name":"cert","readOnly":true}]}],"nodeSelector":{"kubernetes.io/os":"linux"},"securityContext":{"fsGroup":65534,"runAsNonRoot":true,"runAsUser":65534},"serviceAccountName":"controller","terminationGracePeriodSeconds":0,"volumes":[{"name":"cert","secret":{"defaultMode":420,"secretName":"webhook-server-cert"}}]}}}}
+    creationTimestamp: "2025-07-16T21:54:51Z"
+    generation: 1
+    labels:
+      app: metallb
+      component: controller
+    name: controller
+    namespace: metallb-system
+    resourceVersion: "2068"
+    uid: 85acfa44-3dd0-444b-a507-67856d805c2a
+  spec:
+    progressDeadlineSeconds: 600
+    replicas: 1
+    revisionHistoryLimit: 3
+    selector:
+      matchLabels:
+        app: metallb
+        component: controller
+    strategy:
+      rollingUpdate:
+        maxSurge: 25%
+        maxUnavailable: 25%
+      type: RollingUpdate
+    template:
+      metadata:
+        annotations:
+          prometheus.io/port: "7472"
+          prometheus.io/scrape: "true"
+        creationTimestamp: null
+        labels:
+          app: metallb
+          component: controller
+      spec:
+        containers:
+        - args:
+          - --port=7472
+          - --log-level=info
+          env:
+          - name: METALLB_ML_SECRET_NAME
+            value: memberlist
+          - name: METALLB_DEPLOYMENT
+            value: controller
+          image: quay.io/metallb/controller:v0.13.12
+          imagePullPolicy: IfNotPresent
+          livenessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /metrics
+              port: monitoring
+              scheme: HTTP
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+          name: controller
+          ports:
+          - containerPort: 7472
+            name: monitoring
+            protocol: TCP
+          - containerPort: 9443
+            name: webhook-server
+            protocol: TCP
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /metrics
+              port: monitoring
+              scheme: HTTP
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+          resources: {}
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+              - all
+            readOnlyRootFilesystem: true
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          volumeMounts:
+          - mountPath: /tmp/k8s-webhook-server/serving-certs
+            name: cert
+            readOnly: true
+        dnsPolicy: ClusterFirst
+        nodeSelector:
+          kubernetes.io/os: linux
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext:
+          fsGroup: 65534
+          runAsNonRoot: true
+          runAsUser: 65534
+        serviceAccount: controller
+        serviceAccountName: controller
+        terminationGracePeriodSeconds: 0
+        volumes:
+        - name: cert
+          secret:
+            defaultMode: 420
+            secretName: webhook-server-cert
+  status:
+    availableReplicas: 1
+    conditions:
+    - lastTransitionTime: "2025-07-16T21:55:11Z"
+      lastUpdateTime: "2025-07-16T21:55:11Z"
+      message: Deployment has minimum availability.
+      reason: MinimumReplicasAvailable
+      status: "True"
+      type: Available
+    - lastTransitionTime: "2025-07-16T21:54:51Z"
+      lastUpdateTime: "2025-07-16T21:55:11Z"
+      message: ReplicaSet "controller-547c7bdf5c" has successfully progressed.
+      reason: NewReplicaSetAvailable
+      status: "True"
+      type: Progressing
+    observedGeneration: 1
+    readyReplicas: 1
+    replicas: 1
+    updatedReplicas: 1
+- apiVersion: apps/v1
+  kind: ReplicaSet
+  metadata:
+    annotations:
+      deployment.kubernetes.io/desired-replicas: "1"
+      deployment.kubernetes.io/max-replicas: "2"
+      deployment.kubernetes.io/revision: "1"
+    creationTimestamp: "2025-07-16T21:54:51Z"
+    generation: 1
+    labels:
+      app: metallb
+      component: controller
+      pod-template-hash: 547c7bdf5c
+    name: controller-547c7bdf5c
+    namespace: metallb-system
+    ownerReferences:
+    - apiVersion: apps/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: Deployment
+      name: controller
+      uid: 85acfa44-3dd0-444b-a507-67856d805c2a
+    resourceVersion: "2066"
+    uid: c26ec651-fcee-4b30-88a6-38b08d0136bf
+  spec:
+    replicas: 1
+    selector:
+      matchLabels:
+        app: metallb
+        component: controller
+        pod-template-hash: 547c7bdf5c
+    template:
+      metadata:
+        annotations:
+          prometheus.io/port: "7472"
+          prometheus.io/scrape: "true"
+        creationTimestamp: null
+        labels:
+          app: metallb
+          component: controller
+          pod-template-hash: 547c7bdf5c
+      spec:
+        containers:
+        - args:
+          - --port=7472
+          - --log-level=info
+          env:
+          - name: METALLB_ML_SECRET_NAME
+            value: memberlist
+          - name: METALLB_DEPLOYMENT
+            value: controller
+          image: quay.io/metallb/controller:v0.13.12
+          imagePullPolicy: IfNotPresent
+          livenessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /metrics
+              port: monitoring
+              scheme: HTTP
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+          name: controller
+          ports:
+          - containerPort: 7472
+            name: monitoring
+            protocol: TCP
+          - containerPort: 9443
+            name: webhook-server
+            protocol: TCP
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /metrics
+              port: monitoring
+              scheme: HTTP
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+          resources: {}
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+              - all
+            readOnlyRootFilesystem: true
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          volumeMounts:
+          - mountPath: /tmp/k8s-webhook-server/serving-certs
+            name: cert
+            readOnly: true
+        dnsPolicy: ClusterFirst
+        nodeSelector:
+          kubernetes.io/os: linux
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext:
+          fsGroup: 65534
+          runAsNonRoot: true
+          runAsUser: 65534
+        serviceAccount: controller
+        serviceAccountName: controller
+        terminationGracePeriodSeconds: 0
+        volumes:
+        - name: cert
+          secret:
+            defaultMode: 420
+            secretName: webhook-server-cert
+  status:
+    availableReplicas: 1
+    fullyLabeledReplicas: 1
+    observedGeneration: 1
+    readyReplicas: 1
+    replicas: 1
+- apiVersion: v1
+  data:
+    ca.crt: |
+      -----BEGIN CERTIFICATE-----
+      MIIDBTCCAe2gAwIBAgIIGyotGFD68mowDQYJKoZIhvcNAQELBQAwFTETMBEGA1UE
+      AxMKa3ViZXJuZXRlczAeFw0yNTA3MTYyMTM0MzNaFw0zNTA3MTQyMTM5MzNaMBUx
+      EzARBgNVBAMTCmt1YmVybmV0ZXMwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEK
+      AoIBAQDZFQMFSQycwxAxy4CqRsKsCilvLR808cUPHYnwHLYC66XXLtdLMVIyQ/VL
+      Gihe72wddjDxeQTgoLpRbJhDkD4i8SxnZkoFGZ5PxZDfi5dJa3tNLOIv8tcVeBEh
+      gbwcleCojfVjpqPcQ3VYT33Zo005vo7JFi2JQng3Yu04JXWD0KKjqgy7d3pYMEqP
+      3+tWTyYtiWljZ4eH7v1vur4vUBdqFbSRuqM0cMNu7twRKOoMkNsjJZfhYWJHK1Cp
+      9/6e+1W4I1jDpjPeNNznnoa4kCRUui7ReKZwFoVUQKC20Mb0CD96BAGrFS0gPQ8M
+      m1KkbciAeqhUsfS4GbHBeQUeBeMzAgMBAAGjWTBXMA4GA1UdDwEB/wQEAwICpDAP
+      BgNVHRMBAf8EBTADAQH/MB0GA1UdDgQWBBTxgeW6d8T/9NybTHhXPTErt0zm7DAV
+      BgNVHREEDjAMggprdWJlcm5ldGVzMA0GCSqGSIb3DQEBCwUAA4IBAQCKI1Z9vNgd
+      5i9jrYs1WEDFsqTKMag2MpVl8ibJldEur9MTBTdZ15KlirZDzz6a0koiy4QCpPjK
+      GOOF9R4b2c2Pq5aeycRgN5WRkLVycNc8bNSqH+ky2t6kpTH5h1MLSLOPRzEMaIcx
+      xXWzcUm60UwiUZd6cviDz8xxodvsvO0FNXpp7rirBezw9jnnT3WemVymVVE0N852
+      E5SeUIW9bCUIm2UEiaLqA7F4Yun/dkvrFjTYzykk9GJV9LN2CntwrzaWyN6n3CNC
+      mUvNklv7+SMHyDTgkLxq4nWeWamqG6PxlIPc0ZLzaPAVdLylS732mN3Wu6aN5HCN
+      8qNbEI8PCId9
+      -----END CERTIFICATE-----
+  kind: ConfigMap
+  metadata:
+    annotations:
+      kubernetes.io/description: Contains a CA bundle that can be used to verify the
+        kube-apiserver when using internal endpoints such as the internal service
+        IP or kubernetes.default.svc. No other usage is guaranteed across distributions
+        of Kubernetes clusters.
+    creationTimestamp: "2025-07-16T21:54:50Z"
+    name: kube-root-ca.crt
+    namespace: metallb-system
+    resourceVersion: "1913"
+    uid: 7eb01f49-a0d3-417a-b81b-8431f20b5fa4
+- apiVersion: v1
+  data:
+    excludel2.yaml: |
+      announcedInterfacesToExclude: ["^docker.*", "^cbr.*", "^dummy.*", "^virbr.*", "^lxcbr.*", "^veth.*", "^lo$", "^cali.*", "^tunl.*", "^flannel.*", "^kube-ipvs.*", "^cni.*", "^nodelocaldns.*"]
+  kind: ConfigMap
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"v1","data":{"excludel2.yaml":"announcedInterfacesToExclude: [\"^docker.*\", \"^cbr.*\", \"^dummy.*\", \"^virbr.*\", \"^lxcbr.*\", \"^veth.*\", \"^lo$\", \"^cali.*\", \"^tunl.*\", \"^flannel.*\", \"^kube-ipvs.*\", \"^cni.*\", \"^nodelocaldns.*\"]\n"},"kind":"ConfigMap","metadata":{"annotations":{},"name":"metallb-excludel2","namespace":"metallb-system"}}
+    creationTimestamp: "2025-07-16T21:54:51Z"
+    name: metallb-excludel2
+    namespace: metallb-system
+    resourceVersion: "1949"
+    uid: 46eba66a-17a6-4eaa-9cbd-8d576763e04d
+- apiVersion: v1
+  data:
+    secretkey: OEJqUUdwQ3EvWVE1ek05SmZkaHpMQQ==
+  kind: Secret
+  metadata:
+    creationTimestamp: "2025-07-16T21:54:55Z"
+    name: memberlist
+    namespace: metallb-system
+    ownerReferences:
+    - apiVersion: apps/v1
+      kind: Deployment
+      name: controller
+      uid: 85acfa44-3dd0-444b-a507-67856d805c2a
+    resourceVersion: "2017"
+    uid: 70a7bfef-6bee-4b45-8117-d172e8a9aa29
+  type: Opaque
+- apiVersion: v1
+  data:
+    ca.crt: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSURFRENDQWZpZ0F3SUJBZ0lCQURBTkJna3Foa2lHOXcwQkFRc0ZBREFoTVJBd0RnWURWUVFLRXdkdFpYUmgKYkd4aU1RMHdDd1lEVlFRREV3UmpaWEowTUI0WERUSTFNRGN4TmpJd05UUTFOVm9YRFRNMU1EY3hOREl4TlRRMQpOVm93SVRFUU1BNEdBMVVFQ2hNSGJXVjBZV3hzWWpFTk1Bc0dBMVVFQXhNRVkyVnlkRENDQVNJd0RRWUpLb1pJCmh2Y05BUUVCQlFBRGdnRVBBRENDQVFvQ2dnRUJBTDh2T3BGSkIvYjc1OGhzS0NnSmszR3g1ZS90MzN4cjRoR2UKL3hFVnEwWFJyVzQ0ajJ5WmlpbDk0MDgvdjdxdzZxOG5YS2dSc2xEb2tDZHhhSlFGRTlGN2FIY00wVHJUdkJtSgpSbFhNQTJNQ1gwUFhzaW5mUmFldWRlUVlCRExpTjFhSERiRGtneWhoUWtNZng5RFZlU3Z4U0xtemQ5c2tEMXZGCkkrcGhpVDdEYXE3OHVyWmVScEdQTE5sbnl2cW5BNnYrSkZDZkxJWWg2MG1PVUhmS2w5OTBrMEF5UUpUSzVOM1cKMzZRNGtKRjZEeUp1Mmx1RjA4aXc1Q0NoanFOc0VLR1BGZ2RxNjJ5K2NDMEFXWkRLWXN4OWl1MFFuMFVzSVNvLwp3YWE5VGZOUlV1TFAyWTFDNnZ4UEFxcnp6bm1naE1UWko4SnYrZSt0VlV6TkF5ZmQweFVDQXdFQUFhTlRNRkV3CkRnWURWUjBQQVFIL0JBUURBZ0trTUE4R0ExVWRFd0VCL3dRRk1BTUJBZjh3SFFZRFZSME9CQllFRk9ZZFd1RVYKUXFTRHd5SzlaKzNscUhOS0hIRGdNQThHQTFVZEVRUUlNQWFDQkdObGNuUXdEUVlKS29aSWh2Y05BUUVMQlFBRApnZ0VCQUx4bElEWTVvTzZhSVJwRXBOZUJZbjFQYkpXT0hnK2h4ZG9JRU16MDUrcWtGVmlhNm5zRCswQWNwbmRiCmdUWXpKbkVzYVAyOHZDWXduWTN0Vld4d0VOeTFBSElaNFVHWDBWZlZoV2VmSWxtczFVVzY4YmR3eGpYMVFPUlkKQ1JNazNSaGFOMzZqL3dPMm5IeHRtem90cXNlZVA4TkhOVTFrbnUralNKRWZvKytVZGd6dkdHUm0ySnp5KzJmeQpIa3p1RlZsQklEdlVXZXB6NytqSi9rU05yVmVJdnVucVdIV2ZEVzNtTXZKNWwweW5OZnE3cHNNOU40bWFRcmRkCllBTDhoeDhlQkdOcmQxSGFnMDN6akgwcG8yaEtrTFBxS0owQVlNNjFEcTcwL3ErS3lQQjg5TWkvU2VPWCs5MnoKRHFvYVY3b1RzdXZFMFl5ditjUHVwbVpWY2tjPQotLS0tLUVORCBDRVJUSUZJQ0FURS0tLS0tCg==
+    ca.key: LS0tLS1CRUdJTiBSU0EgUFJJVkFURSBLRVktLS0tLQpNSUlFcFFJQkFBS0NBUUVBdnk4NmtVa0g5dnZueUd3b0tBbVRjYkhsNyszZmZHdmlFWjcvRVJXclJkR3RiamlQCmJKbUtLWDNqVHorL3VyRHFyeWRjcUJHeVVPaVFKM0ZvbEFVVDBYdG9kd3pST3RPOEdZbEdWY3dEWXdKZlE5ZXkKS2Q5RnA2NTE1QmdFTXVJM1ZvY05zT1NES0dGQ1F4L0gwTlY1Sy9GSXViTjMyeVFQVzhVajZtR0pQc05xcnZ5Ngp0bDVHa1k4czJXZksrcWNEcS80a1VKOHNoaUhyU1k1UWQ4cVgzM1NUUURKQWxNcmszZGJmcERpUWtYb1BJbTdhClc0WFR5TERrSUtHT28yd1FvWThXQjJycmJMNXdMUUJaa01waXpIMks3UkNmUlN3aEtqL0JwcjFOODFGUzRzL1oKalVMcS9FOENxdlBPZWFDRXhOa253bS81NzYxVlRNMERKOTNURlFJREFRQUJBb0lCQVFDV1dqb2hEK0lucHF2OQp2ckZGNjJIOVEvNmsxZG13SzllNksrUkVOMXBlcWl0T1IwVGtEMHZNbmFncUp1Uk5tZHkycXFuL3N3c2MvZ2lBClBId1dESGd0Z25RQlRCOHZ1Rnh4YUxmYnVYbmdYM2swRFdtYjdHOEhFL2k2elBoZ1crOVJLUnpuUkk2eEx1dkIKaGpqS1QxZmY2djFhclgxUTVlYitNT2V4NThyYmc4d2JQUjYvS0s3ZzZUcFk3dnFQVm5lYTZmYU5RbExmUjVVUwpqVUNjTTZBbHpEWEo2NUJjd2E4QldXbmdibWxjK2lkbm0zK3lWTWprbnY5a0crZU45RVNkcW1ia29RenBaM0ZDClQra2UrVTYxbk1HM2grczJ2RFIxeGJGK21laG9RcE5zRERiYWZNRW9XWWszaHV5a3lpY0ZhdXEyTlJBa0hKSU0KMmczRDV4MEJBb0dCQVAzV2NHMFpaZHNDbGNoVTNNZnVwdEZaeUpTalI2SjFwcGd0c1JhOTRJMGV2cTMvc0Y4Rwp3djg2RFJ6UjJpdUVJaVVvQkdCQWdYbnVKRkhROEZCSHl0S1ZSVzlMeTgyeGVtanVrWWJQV1BKMWhHMWlodGlEClZGVzYrN0htd0dSRGVJV3pKVStmYVZoV1B5MEk4T1pOS0hwajRkbU5rRlY5bGFUVDAycm1CRU5GQW9HQkFNRFEKS0Z0aFhuam00OHk4SUpUSm1McWI4Nkc0bjJiRlR3UmhoNmhzZ2MvNTJXdnlaamFnMWZNc3ZKS05sWVVLOFJoSQpLa1JRUitnQXNrTGRCSFBrcEJJY0wrRXdob2djNERLcXNDd1JjSk45NEo4VVd0V2E5c3IzeE1VK1JiYmZuV0N4Cmk2WS9YdGwrSWk5UDRFYXE2azEreDBPTk9sNCs5KzN2OGNZTEcrV1JBb0dCQUoxTVdYY0NHaUJSeGNmUzdzM20Ka2ZHQmxjNm1NQ240aGpnZmVISURVRGVqS2I1aGlFWWF4cE9xd1oxdVhhaEJ4WGNKQ1Uwc0xCQUhCdks4YTI4VQpUaGVZOE9JN01oeFJNdTM3aUtybHF0VDFCZzlTMHdVd3ZQNHpWTzIxZE51dEErNjJTUlRDVUdHeGNJelQwWlNsCms4UGtTWHlyUVJuNUxOWnJmY1BzcmcrUkFvR0FaSnY1Z3YxQ3c0bVBNbVMwQjQ5T0g0bUN6azg4OWU1YzllZEMKVnpNUFpZdDAxU3Z1QS9GVzBvWDBlL0JmSmNYNDJmZkYvbEY1dytpaEc5eWlGeXNtSmNFSmh0TEFVRVBwQk9jbAorRWk5V21qampYNmNpenRLTGN5dG8xS0VKQkY0MkZ5c2h2b29Md3J2SVlybmQxaDEzQ3djSS9hTWoyTUNFZWtUCldvaXZiTkVDZ1lFQWxIVlFmeGlVaWNlaHJEajNNd2pLUkFSei9kMTBBU3RtQ3h0N3FMejNYQ3hpOHhwNWpKM3MKQUE3STdKRjgwM1pHS295NjZLU2NnWlVqT3g5YS9WZmVhR3ZaR0FkQUlxbHVMdzZoODUwSVAyQU9sRDNXTlpTYwp6R0hNT1pQdGxFTEFMTWlkMHQzdlNOUmVmRTBha0pDVC90bzNreDY5cmxXNTVMRUZSQ2VpbmU0PQotLS0tLUVORCBSU0EgUFJJVkFURSBLRVktLS0tLQo=
+    tls.crt: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSURVRENDQWppZ0F3SUJBZ0lCQVRBTkJna3Foa2lHOXcwQkFRc0ZBREFoTVJBd0RnWURWUVFLRXdkdFpYUmgKYkd4aU1RMHdDd1lEVlFRREV3UmpaWEowTUI0WERUSTFNRGN4TmpJd05UUTFOVm9YRFRJMk1EY3hOakl4TlRRMQpOVm93TFRFck1Da0dBMVVFQXhNaWQyVmlhRzl2YXkxelpYSjJhV05sTG0xbGRHRnNiR0l0YzNsemRHVnRMbk4yCll6Q0NBU0l3RFFZSktvWklodmNOQVFFQkJRQURnZ0VQQURDQ0FRb0NnZ0VCQUx4L1RtQnVpU01mOHc0TEc5ZVYKSWgyNURER3g5UCtSc0hYSjdZOFA3a1FNWkJFckd6dUdsRS9aTjNUajVBNTlWaGRHa0UvNjdBQ2ZzQUtERXB2NApJWUE1ZlhEc2FITUNBaVAycXJ0Y1d3UnlOUDViSXQyMjEwNzJpbFBiVUcrdThKQXFGZjl0aytRQzZ4TGZyTklXCkZXQ1pHL0s2K0pwNDhXRENwQ1paQUFkMDNFZzJRS05uMFhNdXNmTjluaDBmRHJDb0cyR1QzWGNyT0VvdmVSbGYKWWxsTVlMTXVuWmJRT1VqY1k4cEF5UmhFN2o3MGs2aXRaM2hLdmlQUUYvNEZ2elRNZERoaEtwYjJVR1FvWmVEeQpTWTVWOHBWN2lNUHVBaDBBc3ByVHVDTTdPL3pRTkd1RzMwQmdJWG54eDYwRFFiaE5LTk9GNkhkS0wydGJBT0YvCm13VUNBd0VBQWFPQmhqQ0JnekFPQmdOVkhROEJBZjhFQkFNQ0JhQXdFd1lEVlIwbEJBd3dDZ1lJS3dZQkJRVUgKQXdFd0RBWURWUjBUQVFIL0JBSXdBREFmQmdOVkhTTUVHREFXZ0JUbUhWcmhGVUtrZzhNaXZXZnQ1YWh6U2h4dwo0REF0QmdOVkhSRUVKakFrZ2lKM1pXSm9iMjlyTFhObGNuWnBZMlV1YldWMFlXeHNZaTF6ZVhOMFpXMHVjM1pqCk1BMEdDU3FHU0liM0RRRUJDd1VBQTRJQkFRQUFnMkw5Q1hucGJ6NnZHQzNIaHFQaWVpU20zdVlUQm9jOWM5TC8KbDRUNHJKL2xtSXM2V2dPd20yQW9mbEVXNjZyQkZqREgvWkdtQ0kvZkNLT2RQcjBtRHFUUG9MVG5hTTJ3WEp3NwpDMWgraFFVZ3AyZjJlNGE0TEZkQXF1eFhpL3cwcjZFaGZYY1M5dzlXY0dQQkRjWjU0bXR0RXBHOFBhNDFVVXhDCk9hVWo3S09sM0VBQjVCajl6UXJyU0NVS01XZEd2cXJFNjVqT1BmaUpFbWZnL0lyOG9Nclltd0IvN1Joc3Z0N08KS0V5QjJJTWk0aTY1SllhU0MzaUxPNUxpRXBoR2RyaTV5b1JnY1VqSlhnelBURWxjdnBxc0JZc1AwNU80cGNJTQpCV1QvelBMNFU0d2hYRE5mWDlmR2lVc2hKMktUNmMzU1I3YXBJTlIwRGtIWEhkVmcKLS0tLS1FTkQgQ0VSVElGSUNBVEUtLS0tLQo=
+    tls.key: LS0tLS1CRUdJTiBSU0EgUFJJVkFURSBLRVktLS0tLQpNSUlFb3dJQkFBS0NBUUVBdkg5T1lHNkpJeC96RGdzYjE1VWlIYmtNTWJIMC81R3dkY250ancvdVJBeGtFU3NiCk80YVVUOWszZE9Qa0RuMVdGMGFRVC9yc0FKK3dBb01TbS9naGdEbDljT3hvY3dJQ0kvYXF1MXhiQkhJMC9sc2kKM2JiWFR2YUtVOXRRYjY3d2tDb1YvMjJUNUFMckV0K3MwaFlWWUprYjhycjRtbmp4WU1La0psa0FCM1RjU0RaQQpvMmZSY3k2eDgzMmVIUjhPc0tnYllaUGRkeXM0U2k5NUdWOWlXVXhnc3k2ZGx0QTVTTnhqeWtESkdFVHVQdlNUCnFLMW5lRXErSTlBWC9nVy9OTXgwT0dFcWx2WlFaQ2hsNFBKSmpsWHlsWHVJdys0Q0hRQ3ltdE80SXpzNy9OQTAKYTRiZlFHQWhlZkhIclFOQnVFMG8wNFhvZDBvdmExc0E0WCtiQlFJREFRQUJBb0lCQUI5N205bWJYS2hUTThOSwpzN0hFSk5pV0NhVmJOYkpoNFBrcmF0UVVNeFdHaEVnaHpRQ2FMN2RPYm1iRmtWZWlNM2pidmtxOWZDRjJpbTFBCit5QzF4dEtseDMvTzNIc3BBTGFGQW1zY3Q4NzhURUdYY3pGWTBvbEx3RHJWVEkvNnhnOHVHRko3T05KQ2NvVEsKZXhEencwcEpDRlA0U29GeVpjNWxkQWs3b0RlZVVhN3I4Wk5aekNVOUQ3am0ybGxjeWR4ck5mT1Nkc3dqL3QycApiTXl5dVpxWE80ckpXUXV0TUlGMmR6VEZSYXFCVlo2K1NMOE1rYUduRlp3bTNsekV3VENONWowU3ZOVWkxM3pRCm9KMkZqTTIwT0JYUC9TbW1ZVjVreFgraUdWbjl2ZmdWcGg3N2VPYlI4dVRUc2E3L05uYytkU0xRMGFtL1RVZngKd29yOERSa0NnWUVBMXd6MG9PaGt5Y2ZQYWpvc0dGTm9BTHc2YndhSHdEZzNzeEVwa1h6QTN4RGx0empueWNaUQpwSEpoVkl5Um4xdDE0Y2RDcnZpOEN3YzBXMURwMGQ5SDdsZzBxeDhqUVA4REpNRUJzT2VQTzN3Rkh2Mkc4U1M4Cnh5bXI0aWtzdDBIdlh5OEw5bFJJWTdoZXdxdW9md3NGeGpIMmc2a0hKNG92TUowd09zcUkwUHNDZ1lFQTRHUDEKbWxJMEc5b2VlV1pmYnEwUDVnY0ZFMVlJWFJScUJtQnltV2FtNE9WUDFTcEZQYkJ6c2o1OFdvVVpQUnVOTzdWawp1Zk5Rb0VLcmViYjJyaEFUSW5RZVlydGpZYXNLcndsYUlFWFFSR1VWYlZldlM2cmxramIyL0djdkpJVkRvWXMyCjdpTXVaUWFQRHdsQmdkS1JpY2ZOVGY2SEVZR2orYmwzMlFRbGcvOENnWUFMRGc1eFN5RUxRbXRHTWJGY21zVUkKN0tRd1d1eVZsQTVBOVV2bXY3d0dlNDdqaVZoWkJnblZPbEFJa2FWV3hOUGRoR25JSnQ4N3plWUNIN20xWVQ0SQpZWjVyZ1pGRllSYWZTQkMzTUdBcmxhZUp2VXkzanNUcGxCblM2WHp6K3I2OGJPVzNod09scEsreVlES3NQVHZSCndYWER0T2U2UDU5SFozMDRPSHNxQ3dLQmdDclF4L2RYUWh3aVpYZ3lvWGtEeXFuUW94WktielFiaGhPTGFiSjkKbE5BSzBVM1NULzN5WWxFYmZTemtncWxYVFg2Y0lRa2VOVDh2R1hzUy8wUzlTbmxqZ0x6RUZyVjNKb1c1bWhuWQpXR0lFaTY4ZWNSTldHNUhuclA4Q1RVdUJwaUwzNWxaUUhqVW1xRHR0UDdPZTB5aGdHSHVPV29Wcm9EY3hQWDRLClBZSlBBb0dCQUxoZmhaQzkwZi96NkhDWUE2RDVHRkNMRE9OV0wxSmhRdGh2TmN5MENRTDMySTJlS0lRaG5jVWEKRGJEV2FFRWh4QmUyaDE4b1h5K1JtMzl3c1hjcnFPMlY4b3BBUEhkeGxVWUNVZXFHdW52WVRpYktiYTMybld6WgpodWJ5TFpBQmlCalNRV1VBdjVCbnV3MnFPZFhyOTFGSlo5UzdSaHlNUWd3SDlsaC9YSTdGCi0tLS0tRU5EIFJTQSBQUklWQVRFIEtFWS0tLS0tCg==
+  kind: Secret
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"v1","kind":"Secret","metadata":{"annotations":{},"name":"webhook-server-cert","namespace":"metallb-system"}}
+    creationTimestamp: "2025-07-16T21:54:51Z"
+    name: webhook-server-cert
+    namespace: metallb-system
+    resourceVersion: "2022"
+    uid: e3165d96-7bf6-4071-a03c-f7d91b86d68c
+  type: Opaque
+kind: List
+metadata:
+  resourceVersion: ""
+apiVersion: v1
+items:
+- apiVersion: metallb.io/v1beta1
+  kind: IPAddressPool
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"metallb.io/v1beta1","kind":"IPAddressPool","metadata":{"annotations":{},"name":"main-pool","namespace":"metallb-system"},"spec":{"addresses":["192.168.12.50-192.168.12.250"]}}
+    creationTimestamp: "2025-07-16T21:56:14Z"
+    generation: 1
+    name: main-pool
+    namespace: metallb-system
+    resourceVersion: "2172"
+    uid: 74934b6e-7d4f-47d1-bb33-9eacbd9f5bbd
+  spec:
+    addresses:
+    - 192.168.12.50-192.168.12.250
+    autoAssign: true
+    avoidBuggyIPs: false
+- apiVersion: metallb.io/v1beta1
+  kind: L2Advertisement
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"metallb.io/v1beta1","kind":"L2Advertisement","metadata":{"annotations":{},"name":"l2adv","namespace":"metallb-system"}}
+    creationTimestamp: "2025-07-16T21:56:14Z"
+    generation: 1
+    name: l2adv
+    namespace: metallb-system
+    resourceVersion: "2173"
+    uid: 075e5e4c-d275-425c-bb8a-d1d86306b73f
+kind: List
+metadata:
+  resourceVersion: ""

@@ -1,0 +1,80 @@
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+  annotations:
+    kubectl.kubernetes.io/last-applied-configuration: |
+      {"apiVersion":"cert-manager.io/v1","kind":"ClusterIssuer","metadata":{"annotations":{},"name":"letsencrypt-prod"},"spec":{"acme":{"email":"redwards@sleepy-puppy.com","privateKeySecretRef":{"name":"letsencrypt-prod-account-key"},"server":"https://acme-v02.api.letsencrypt.org/directory","solvers":[{"dns01":{"webhook":{"config":{"apiKeySecretRef":{"key":"api-key","name":"namecheap-api-key"},"apiUserSecretRef":{"key":"api-user","name":"namecheap-api-key"}},"groupName":"acme.sleepy-puppy.com","solverName":"namecheap"}}}]}}}
+  creationTimestamp: "2025-07-16T22:46:50Z"
+  generation: 1
+  name: letsencrypt-prod
+  resourceVersion: "7988"
+  uid: 71ac16b7-a494-4d9e-941c-71fa385f3bc5
+spec:
+  acme:
+    email: redwards@sleepy-puppy.com
+    privateKeySecretRef:
+      name: letsencrypt-prod-account-key
+    server: https://acme-v02.api.letsencrypt.org/directory
+    solvers:
+    - dns01:
+        webhook:
+          config:
+            apiKeySecretRef:
+              key: api-key
+              name: namecheap-api-key
+            apiUserSecretRef:
+              key: api-user
+              name: namecheap-api-key
+          groupName: acme.sleepy-puppy.com
+          solverName: namecheap
+status:
+  acme:
+    lastPrivateKeyHash: Cloi075HZmj6/fCXtLJ1QXazUpUkUrMVnrzNWGPD+KA=
+    lastRegisteredEmail: redwards@sleepy-puppy.com
+  conditions:
+  - lastTransitionTime: "2025-07-16T22:46:51Z"
+    message: The ACME account was registered with the ACME server
+    observedGeneration: 1
+    reason: ACMEAccountRegistered
+    status: "True"
+    type: Ready
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+  annotations:
+    kubectl.kubernetes.io/last-applied-configuration: |
+      {"apiVersion":"cert-manager.io/v1","kind":"ClusterIssuer","metadata":{"annotations":{},"name":"letsencrypt-staging"},"spec":{"acme":{"email":"richard@sleepy-puppy.com","privateKeySecretRef":{"name":"letsencrypt-staging-key"},"server":"https://acme-staging-v02.api.letsencrypt.org/directory","solvers":[{"dns01":{"webhook":{"config":{"apiKeySecretRef":{"key":"apiKey","name":"namecheap-api-key"},"apiUserSecretRef":{"key":"apiUser","name":"namecheap-api-key"}},"groupName":"acme.sleepy-puppy.com","solverName":"namecheap"}}}]}}}
+  creationTimestamp: "2025-07-16T22:43:21Z"
+  generation: 1
+  name: letsencrypt-staging
+  resourceVersion: "7583"
+  uid: d84ef5f4-86b9-4d83-af60-2927bf98f51c
+spec:
+  acme:
+    email: richard@sleepy-puppy.com
+    privateKeySecretRef:
+      name: letsencrypt-staging-key
+    server: https://acme-staging-v02.api.letsencrypt.org/directory
+    solvers:
+    - dns01:
+        webhook:
+          config:
+            apiKeySecretRef:
+              key: apiKey
+              name: namecheap-api-key
+            apiUserSecretRef:
+              key: apiUser
+              name: namecheap-api-key
+          groupName: acme.sleepy-puppy.com
+          solverName: namecheap
+status:
+  acme:
+    lastPrivateKeyHash: wdc/Squd2XNawTRGaPjvjt9tk82JaA46iDlt6p14h9I=
+    lastRegisteredEmail: richard@sleepy-puppy.com
+  conditions:
+  - lastTransitionTime: "2025-07-16T22:43:22Z"
+    message: The ACME account was registered with the ACME server
+    observedGeneration: 1
+    reason: ACMEAccountRegistered
+    status: "True"
+    type: Ready

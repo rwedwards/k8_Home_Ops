@@ -1,0 +1,44 @@
+apiVersion: source.toolkit.fluxcd.io/v1beta2
+kind: HelmRepository
+metadata:
+  name: prometheus-community
+  namespace: flux-system
+spec:
+  interval: 30m
+  url: https://prometheus-community.github.io/helm-charts
+  timeout: 1m
+
+---
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: kube-prom
+  namespace: monitoring
+spec:
+  interval: 5m
+  chart:
+    spec:
+      chart: kube-prometheus-stack
+      sourceRef:
+        kind: HelmRepository
+        name: prometheus-community
+        namespace: flux-system
+      version: "58.6.0"  # Replace if you're using a different version
+  values:
+    grafana:
+      ingress:
+        enabled: true
+        ingressClassName: nginx
+        hosts:
+          - grafana.sleepy-puppy.com
+        tls:
+          - secretName: grafana-tls
+            hosts:
+              - grafana.sleepy-puppy.com
+      persistence:
+        enabled: true
+        size: 10Gi
+    prometheus:
+      prometheusSpec:
+        retention: 7d
+
